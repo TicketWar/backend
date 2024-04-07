@@ -1,0 +1,25 @@
+# ---------------------------------
+# production environment settings
+# ---------------------------------
+server:
+  port: 8080 # localhost
+
+spring:
+  config:
+    activate:
+      on-profile: prod
+  jpa:
+    hibernate:
+      ddl-auto: none # use schema.sql for production DDL
+  sql:
+    init:
+      mode: always # spring boot >= v2.5.x / run script on every database
+      schema-locations:
+      - classpath:prod_sql_init/schema.sql
+      data-locations:
+      - classpath:prod_sql_init/data.sql
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${MYSQL_HOST:localhost}:3306/ticketwar
+    username: root
+    password: # enter your root password if set

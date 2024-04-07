@@ -1,15 +1,17 @@
 spring:
-  application:
-    name: TicketWar
   config:
     import:
-      - classpath:/yaml/application-local.yml
-      # - classpath:/yaml/application-dev.yml
-      # - classpath:/yaml/application-prod.yml
+      - classpath:/yaml/local.yml
+      - classpath:/yaml/dev.yml
+      - classpath:/yaml/prod.yml
+      - classpath:/yaml/log.yml
+  application:
+    name: TicketWar
   profiles:
     group:
-      profile_group_1: local, log # 설정 = local.yml + log.yml
-      # profile_group_2: dev ...
-  # --------------------------------
-    active: profile_group_1
-  # --------------------------------
+      profile_local : local, log
+      profile_dev : dev, log
+      profile_prod : prod
+    #######################
+    active: profile_local
+    #######################
