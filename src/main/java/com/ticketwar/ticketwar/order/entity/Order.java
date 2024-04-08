@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import lombok.*;
 
-@Entity(name = "ORDER")
+@Entity(name = "CUSTOMER_ORDER")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Order {
