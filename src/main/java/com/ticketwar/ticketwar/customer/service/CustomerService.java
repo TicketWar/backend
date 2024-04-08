@@ -16,11 +16,10 @@ public class CustomerService {
 
   public boolean signUp(CustomerDto customerDto) {
     // TODO: 중복 회원 검증 ... 기타 등등
-    Customer customer =
-        customerRepository.save(
-            Customer.builder().nickname("김민규").email("kimminkyeu@gmail.com").build());
     try {
-      Customer saved = customerRepository.save(customer);
+      Customer customer =
+          customerRepository.save(
+              Customer.builder().nickname("김민규").email("kimminkyeu@gmail.com").build());
     } catch (DataAccessException e) {
       return false;
     }
