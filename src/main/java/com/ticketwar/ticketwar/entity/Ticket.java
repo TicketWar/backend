@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -30,6 +31,7 @@ public class Ticket {
     private Performance performance;
 
     //생성일자(예매일자?)
+    @CreationTimestamp
     @Column(name = "created_at", nullable = false)
     private LocalDateTime created_at = LocalDateTime.now();
 
