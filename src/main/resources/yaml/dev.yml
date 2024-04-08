@@ -1,0 +1,18 @@
+# ---------------------------------
+# development environment settings
+# ---------------------------------
+server:
+  port: 8080 # localhost
+
+spring:
+  config:
+    activate:
+      on-profile: dev
+  jpa:
+    hibernate:
+      ddl-auto: create-drop # none = Default setting for MySQL
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${MYSQL_HOST:localhost}:3306/ticketwar?createDatabaseIfNotExist=true
+    username: root
+    password: # enter your root password if set.
