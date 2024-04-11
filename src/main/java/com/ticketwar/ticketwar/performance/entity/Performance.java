@@ -32,4 +32,10 @@ public class Performance extends CreatedAndUpdatedTimeTrackable {
     this.ticketingStartAt = ticketingStartAt;
     this.ticketingEndAt = ticketingEndAt;
   }
+
+  public void update(String name, ZonedDateTime ticketingStartAt, ZonedDateTime ticketingEndAt) {
+    this.name = name;
+    this.ticketingStartAt = ticketingStartAt;
+    this.ticketingEndAt = ticketingEndAt;
+  }
 }
