@@ -24,4 +24,9 @@ public class Customer extends CreatedAndUpdatedTimeTrackable {
     this.nickname = nickname;
     this.email = email;
   }
+
+  public void update(String nickname, String email) {
+    this.nickname = nickname;
+    this.email = email;
+  }
 }
