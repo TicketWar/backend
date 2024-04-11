@@ -38,4 +38,9 @@ public class Ticket extends CreatedTimeTrackable {
     this.seat = seat;
     this.performance = performance;
   }
+
+  public void update(Seat seat, Performance performance) {
+    this.seat = seat;
+    this.performance = performance;
+  }
 }
