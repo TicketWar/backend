@@ -49,7 +49,7 @@ public class CustomerService {
   }
 
   // id로 삭제
-  public void deleteById(Long id) {
+  public void delete(Long id) {
     customerRepository.deleteById(id);
   }
 
