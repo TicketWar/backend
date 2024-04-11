@@ -30,4 +30,10 @@ public class Seat {
     this.position = position;
     this.seatStatus = seatStatus;
   }
+
+  public void update(Performance performance, String position, SeatStatus seatStatus) {
+    this.performance = performance;
+    this.position = position;
+    this.seatStatus = seatStatus;
+  }
 }
