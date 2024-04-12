@@ -15,9 +15,9 @@ spring:
     init:
       mode: always # spring boot >= v2.5.x / run script on every database
       schema-locations:
-      - classpath:prod_sql_init/schema.sql
+        - classpath:prod_sql_init/schema.sql
       data-locations:
-      - classpath:prod_sql_init/data.sql
+        - classpath:prod_sql_init/data.sql
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://${MYSQL_HOST:localhost}:3306/ticketwar

@@ -1,13 +1,26 @@
 package com.ticketwar.ticketwar.seat.entity;
 
 import com.ticketwar.ticketwar.performance.entity.Performance;
-import jakarta.persistence.*;
-import lombok.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
-@Entity(name = "SEAT")
+@Entity
+@Table(name = "SEAT")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Seat {
+
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   @Column(name = "seat_id")
@@ -15,13 +28,13 @@ public class Seat {
 
   @ManyToOne // many seats have fk to one performance
   @JoinColumn(name = "performance_id", nullable = false)
-  private @NonNull Performance performance;
+  private Performance performance;
 
   @Column(name = "position", length = 30, nullable = false)
-  private @NonNull String position;
+  private String position;
 
   @Column(name = "available", nullable = false)
-  private @NonNull SeatStatus seatStatus;
+  private SeatStatus seatStatus;
 
   @Builder
   protected Seat(
