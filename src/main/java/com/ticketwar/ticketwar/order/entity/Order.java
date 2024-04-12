@@ -14,6 +14,7 @@ import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -42,5 +43,24 @@ public class Order {
   protected Order(@NonNull Customer customer, @NonNull LocalDateTime orderedAt) {
     this.customer = customer;
     this.orderedAt = orderedAt;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    Order order = (Order) o;
+    return Objects.equals(tickets, order.tickets) && Objects.equals(id, order.id)
+        && Objects.equals(customer, order.customer) && Objects.equals(orderedAt,
+        order.orderedAt);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(tickets, id, customer, orderedAt);
   }
 }

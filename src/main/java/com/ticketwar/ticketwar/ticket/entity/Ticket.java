@@ -17,6 +17,7 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -50,5 +51,24 @@ public class Ticket extends CreatedTimeTrackable {
   protected Ticket(@NonNull Seat seat, @NonNull Performance performance) {
     this.seat = seat;
     this.performance = performance;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    Ticket ticket = (Ticket) o;
+    return Objects.equals(orders, ticket.orders) && Objects.equals(id, ticket.id)
+        && Objects.equals(seat, ticket.seat) && Objects.equals(performance,
+        ticket.performance);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(orders, id, seat, performance);
   }
 }

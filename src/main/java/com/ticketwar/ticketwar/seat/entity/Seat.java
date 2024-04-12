@@ -9,6 +9,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import java.util.Objects;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -42,5 +43,24 @@ public class Seat {
     this.performance = performance;
     this.position = position;
     this.seatStatus = seatStatus;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    Seat seat = (Seat) o;
+    return Objects.equals(id, seat.id) && Objects.equals(performance,
+        seat.performance) && Objects.equals(position, seat.position)
+        && seatStatus == seat.seatStatus;
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(id, performance, position, seatStatus);
   }
 }

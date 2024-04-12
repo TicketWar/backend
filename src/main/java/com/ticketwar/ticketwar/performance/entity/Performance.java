@@ -8,6 +8,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.time.ZonedDateTime;
+import java.util.Objects;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -42,5 +43,24 @@ public class Performance extends CreatedAndUpdatedTimeTrackable {
     this.name = name;
     this.ticketingStartAt = ticketingStartAt;
     this.ticketingEndAt = ticketingEndAt;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    Performance that = (Performance) o;
+    return Objects.equals(id, that.id) && Objects.equals(name, that.name)
+        && Objects.equals(ticketingStartAt, that.ticketingStartAt)
+        && Objects.equals(ticketingEndAt, that.ticketingEndAt);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(id, name, ticketingStartAt, ticketingEndAt);
   }
 }
