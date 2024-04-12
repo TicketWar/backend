@@ -49,7 +49,6 @@ public class CustomerService {
     }
     customer.setNickname(updateNickname);
     customer.setEmail(updateEmail);
-    customerRepository.save(customer);
     return true;
   }
 
