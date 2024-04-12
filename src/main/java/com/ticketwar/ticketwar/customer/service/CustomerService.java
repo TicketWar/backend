@@ -28,7 +28,8 @@ public class CustomerService {
     if (isDuplicateEmail(email)) {
       throw new BadRequestException("Duplicated email");
     }
-    Customer newCustomer = customerReqDto.toCustomer();
+    
+    final Customer newCustomer = customerReqDto.toCustomer();
     customerRepository.save(newCustomer);
     return true;
   }
