@@ -2,6 +2,7 @@ package com.ticketwar.ticketwar.customer.repository;
 
 import com.ticketwar.ticketwar.customer.entity.Customer;
 import org.springframework.data.jpa.repository.JpaRepository;
+
 import org.springframework.data.jpa.repository.Meta;
 
 //https://docs.spring.io/spring-data/jpa/reference/jpa/query-methods.html
