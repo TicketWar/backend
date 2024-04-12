@@ -1,6 +1,8 @@
 package com.ticketwar.ticketwar.customer.dto;
 
+import com.ticketwar.ticketwar.common.interfaces.BaseDto;
 import com.ticketwar.ticketwar.customer.entity.Customer;
+import java.util.Objects;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -9,7 +11,7 @@ import lombok.NonNull;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
-public class CustomerReqDto {
+public class CustomerReqDto implements BaseDto<Customer> {
 
   private String nickname;
   private String email;
@@ -20,10 +22,29 @@ public class CustomerReqDto {
     this.email = email;
   }
 
-  public Customer toCustomer() {
+  @Override
+  public Customer toEntity() {
     return Customer.builder()
                    .nickname(getNickname())
                    .email(getEmail())
                    .build();
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    CustomerReqDto that = (CustomerReqDto) o;
+    return Objects.equals(nickname, that.nickname) && Objects.equals(email,
+        that.email);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(nickname, email);
   }
 }
