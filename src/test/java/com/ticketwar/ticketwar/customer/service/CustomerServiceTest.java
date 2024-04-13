@@ -3,18 +3,23 @@ package com.ticketwar.ticketwar.customer.service;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.ticketwar.ticketwar.customer.dto.CustomerReqDto;
+import com.ticketwar.ticketwar.customer.dto.CustomerResDto;
 import com.ticketwar.ticketwar.customer.entity.Customer;
 import com.ticketwar.ticketwar.customer.repository.CustomerRepository;
+import com.ticketwar.ticketwar.customer.utils.CustomerMapper;
 import jakarta.transaction.Transactional;
 import java.util.Optional;
 import org.apache.coyote.BadRequestException;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 
 
 @SpringBootTest
@@ -25,6 +30,7 @@ class CustomerServiceTest {
   private CustomerService service;
   @Autowired
   private CustomerRepository repository;
+  private final CustomerMapper mapper = new CustomerMapper();
 
   @Nested
   @DisplayName("회원가입 - signUp")
@@ -45,7 +51,7 @@ class CustomerServiceTest {
       Optional<Customer> saved = repository.findByNickname(nickname);
 
       // then
-      assertEquals(true, saved.isPresent());
+      assertTrue(saved.isPresent());
       assertEquals(nickname, saved.get().getNickname());
       assertEquals(email, saved.get().getEmail());
     }
@@ -71,7 +77,7 @@ class CustomerServiceTest {
       Optional<Customer> saved = repository.findByNickname(nickname);
 
       // then
-      assertEquals(true, saved.isPresent());
+      assertTrue(saved.isPresent());
       assertEquals(nickname, saved.get().getNickname());
       assertEquals(email, saved.get().getEmail());
     }
@@ -98,7 +104,7 @@ class CustomerServiceTest {
       Optional<Customer> saved = repository.findByEmail(email);
 
       // then
-      assertEquals(true, saved.isPresent());
+      assertTrue(saved.isPresent());
       assertEquals(nickname, saved.get().getNickname());
       assertEquals(email, saved.get().getEmail());
     }
@@ -131,7 +137,7 @@ class CustomerServiceTest {
       // then
       Optional<Customer> saved = repository.findById(c.getId());
       // then
-      assertEquals(true, saved.isPresent());
+      assertTrue(saved.isPresent());
       assertEquals(updatedNickname, saved.get().getNickname());
       assertEquals(email, saved.get().getEmail());
     }
@@ -157,7 +163,7 @@ class CustomerServiceTest {
       // then
       Optional<Customer> saved = repository.findById(c.getId());
       // then
-      assertEquals(true, saved.isPresent());
+      assertTrue(saved.isPresent());
       assertEquals(nickname, saved.get().getNickname());
       assertEquals(email, saved.get().getEmail());
     }
@@ -191,7 +197,7 @@ class CustomerServiceTest {
       // then
       Optional<Customer> saved = repository.findById(c2.getId());
       // then
-      assertEquals(true, saved.isPresent());
+      assertTrue(saved.isPresent());
       assertEquals(nickname_2, saved.get().getNickname());
       assertEquals(email_2, saved.get().getEmail());
     }
@@ -224,11 +230,131 @@ class CustomerServiceTest {
       // then
       Optional<Customer> saved = repository.findById(c2.getId());
       // then
-      assertEquals(true, saved.isPresent());
+      assertTrue(saved.isPresent());
       assertEquals(nickname_2, saved.get().getNickname());
       assertEquals(email_2, saved.get().getEmail());
     }
 
   }
 
+  @Nested
+  @DisplayName("회원 정보 획득 - getById")
+  public class TestGetCustomerById {
+
+    private Customer customer;
+
+    @BeforeEach
+    public void setUp() {
+      customer = Customer.builder()
+                         .nickname("test")
+                         .email("test@test.com")
+                         .build();
+    }
+
+    @Test
+    @DisplayName("정상 - 있는 정보 요청")
+    public void test_normal_case() {
+      // given
+      Customer c = repository.saveAndFlush(customer);
+      CustomerResDto dto;
+      CustomerResDto expected = mapper.mapToResDto(c);
+
+      // when
+      try { // 더 나은 방향이 필요함.
+        dto = service.getById(c.getId());
+      } catch (Exception e) {
+        assertEquals(1, 0);
+        return;
+      }
+      // then
+      assertEquals(expected, dto);
+    }
+
+    @Test
+    @DisplayName("실패 - 없는 정보 요청")
+    public void test_not_exist_case() {
+      // when
+      assertThrows(NotFoundException.class, () -> service.getById(999L));
+    }
+  }
+
+  @Nested
+  @DisplayName("회원 정보 획득 - getByNickname")
+  public class TestGetCustomerByNickname {
+
+    private Customer customer;
+
+    @BeforeEach
+    public void setUp() {
+      customer = Customer.builder()
+                         .nickname("test")
+                         .email("test@test.com")
+                         .build();
+    }
+
+    @Test
+    @DisplayName("정상 - 있는 정보 요청")
+    public void test_normal_case() {
+      // given
+      Customer c = repository.saveAndFlush(customer);
+      CustomerResDto dto;
+      CustomerResDto expected = mapper.mapToResDto(c);
+      // when
+      try { // 더 나은 방향이 필요함.
+        dto = service.getByNickname(c.getNickname());
+      } catch (Exception e) {
+        assertEquals(1, 0);
+        return;
+      }
+      // then
+      assertEquals(expected, dto);
+    }
+
+    @Test
+    @DisplayName("실패 - 없는 정보 요청")
+    public void test_not_exist_case() {
+      // when
+      assertThrows(NotFoundException.class, () -> service.getByNickname("tttt"));
+    }
+  }
+
+  @Nested
+  @DisplayName("회원 정보 획득 - getByEmail")
+  public class TestGetCustomerByEmail {
+
+    private Customer customer;
+
+    @BeforeEach
+    public void setUp() {
+      customer = Customer.builder()
+                         .nickname("test")
+                         .email("test@test.com")
+                         .build();
+    }
+
+    @Test
+    @DisplayName("정상 - 있는 정보 요청")
+    public void test_normal_case() {
+      // given
+      Customer c = repository.saveAndFlush(customer);
+      CustomerResDto dto;
+      CustomerResDto expected = mapper.mapToResDto(c);
+      // when
+      try { // 더 나은 방향이 필요함.
+        dto = service.getByEmail(c.getEmail());
+      } catch (Exception e) {
+        assertEquals(1, 0);
+        return;
+      }
+      // then
+      assertEquals(expected, dto);
+    }
+
+    @Test
+    @DisplayName("실패 - 없는 정보 요청")
+    public void test_not_exist_case() {
+      // when
+      assertThrows(NotFoundException.class, () -> service.getByEmail("tttt"));
+    }
+  }
 }

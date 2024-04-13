@@ -1,22 +1,34 @@
 package com.ticketwar.ticketwar.customer.service;
 
 import com.ticketwar.ticketwar.customer.dto.CustomerReqDto;
+import com.ticketwar.ticketwar.customer.dto.CustomerResDto;
 import com.ticketwar.ticketwar.customer.entity.Customer;
 import com.ticketwar.ticketwar.customer.repository.CustomerRepository;
+import com.ticketwar.ticketwar.customer.utils.CustomerMapper;
 import jakarta.transaction.Transactional;
 import org.apache.coyote.BadRequestException;
+import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
 public class CustomerService {
 
   private final CustomerRepository customerRepository;
+  private final CustomerMapper customerMapper;
 
   public CustomerService(CustomerRepository customerRepository) {
     this.customerRepository = customerRepository;
+    this.customerMapper = new CustomerMapper();
   }
 
-  // 이후에 return type 변경할 것.
+  /**
+   * 회원가입시 로직
+   * NOTE: 이후 return value 조정이 필요함.
+   *
+   * @param customerReqDto
+   * @return
+   * @throws BadRequestException
+   */
   @Transactional
   public boolean signUp(CustomerReqDto customerReqDto) throws BadRequestException {
     final String nickname = customerReqDto.getNickname();
@@ -34,6 +46,15 @@ public class CustomerService {
     return true;
   }
 
+  /**
+   * 회원 정보 업데이트.
+   * NOTE: 이후 Return value 변경 필요함.
+   *
+   * @param id
+   * @param customerReqDto
+   * @return
+   * @throws BadRequestException
+   */
   @Transactional
   public boolean update(Long id, CustomerReqDto customerReqDto) throws BadRequestException {
     final Customer customer = customerRepository.findById(id)
@@ -54,13 +75,52 @@ public class CustomerService {
   }
 
   /**
+   * id 를 기반으로 회원 정보를 조회합니다.
+   *
+   * @param id
+   * @return
+   * @throws NotFoundException
+   */
+  public CustomerResDto getById(Long id) throws NotFoundException {
+    return customerRepository.findById(id)
+                             .map(customerMapper::mapToResDto)
+                             .orElseThrow(NotFoundException::new);
+  }
+
+  /**
+   * nickname 을 기반으로 회원 정보를 조회합니다.
+   *
+   * @param nickname
+   * @return
+   * @throws NotFoundException
+   */
+  public CustomerResDto getByNickname(String nickname) throws NotFoundException {
+    return customerRepository.findByNickname(nickname)
+                             .map(customerMapper::mapToResDto)
+                             .orElseThrow(NotFoundException::new);
+  }
+
+  /**
+   * email 을 기반으로 회원 정보를 조회합니다.
+   *
+   * @param email
+   * @return
+   * @throws NotFoundException
+   */
+  public CustomerResDto getByEmail(String email) throws NotFoundException {
+    return customerRepository.findByEmail(email)
+                             .map(customerMapper::mapToResDto)
+                             .orElseThrow(NotFoundException::new);
+  }
+
+  /**
    * 기존 ID 를 제외하고 같은 nickname 을 가진 customer 가 있는지 확인합니다.
    *
    * @param id
    * @param nickname
    * @return 존재할 경우 true
    */
-  private boolean isDuplicateNickname(Long id, String nickname) {
+  public boolean isDuplicateNickname(Long id, String nickname) {
     return customerRepository.findByNickname(nickname)
                              .map(customer -> customer.getId() != id)
                              .orElse(false);
@@ -72,7 +132,7 @@ public class CustomerService {
    * @param nickname
    * @return 존재할 경우 true
    */
-  private boolean isDuplicateNickname(String nickname) {
+  public boolean isDuplicateNickname(String nickname) {
     return customerRepository.findByNickname(nickname).isPresent();
   }
 
@@ -83,7 +143,7 @@ public class CustomerService {
    * @param email
    * @return 존재할 경우 true
    */
-  private boolean isDuplicateEmail(Long id, String email) {
+  public boolean isDuplicateEmail(Long id, String email) {
     return customerRepository.findByEmail(email)
                              .map(customer -> customer.getId() != id)
                              .orElse(false);
@@ -95,7 +155,7 @@ public class CustomerService {
    * @param email
    * @return 존재할 경우 true
    */
-  private boolean isDuplicateEmail(String email) {
+  public boolean isDuplicateEmail(String email) {
     return customerRepository.findByEmail(email).isPresent();
   }
 }
