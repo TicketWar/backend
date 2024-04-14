@@ -13,10 +13,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class CustomerService {
 
+  private final CustomerQueryService customerQueryService;
   private final CustomerRepository customerRepository;
   private final CustomerMapper customerMapper;
 
-  public CustomerService(CustomerRepository customerRepository) {
+  public CustomerService(CustomerQueryService customerQueryService,
+      CustomerRepository customerRepository) {
+    this.customerQueryService = customerQueryService;
     this.customerRepository = customerRepository;
     this.customerMapper = new CustomerMapper();
   }
@@ -26,7 +29,7 @@ public class CustomerService {
    * NOTE: 이후 return value 조정이 필요함.
    *
    * @param customerReqDto
-   * @return
+   * @return Customer
    * @throws BadRequestException
    */
   @Transactional
@@ -34,10 +37,10 @@ public class CustomerService {
     final String nickname = customerReqDto.getNickname();
     final String email = customerReqDto.getEmail();
 
-    if (isDuplicateNickname(nickname)) {
+    if (customerQueryService.isDuplicateNickname(nickname)) {
       throw new BadRequestException("Duplicated nickname");
     }
-    if (isDuplicateEmail(email)) {
+    if (customerQueryService.isDuplicateEmail(email)) {
       throw new BadRequestException("Duplicated email");
     }
     return customerRepository.save(customerReqDto.toEntity());
@@ -60,10 +63,10 @@ public class CustomerService {
     final String updateNickname = customerReqDto.getNickname();
     final String updateEmail = customerReqDto.getEmail();
 
-    if (isDuplicateNickname(id, updateNickname)) {
+    if (customerQueryService.isDuplicateNickname(id, updateNickname)) {
       throw new BadRequestException("Duplicated nickname");
     }
-    if (isDuplicateEmail(id, updateEmail)) {
+    if (customerQueryService.isDuplicateEmail(id, updateEmail)) {
       throw new BadRequestException("Duplicated email");
     }
     customer.setNickname(updateNickname);
@@ -108,51 +111,5 @@ public class CustomerService {
     return customerRepository.findByEmail(email)
                              .map(customerMapper::mapToResDto)
                              .orElseThrow(NotFoundException::new);
-  }
-
-  /**
-   * 기존 ID 를 제외하고 같은 nickname 을 가진 customer 가 있는지 확인합니다.
-   *
-   * @param id
-   * @param nickname
-   * @return 존재할 경우 true
-   */
-  public boolean isDuplicateNickname(Long id, String nickname) {
-    return customerRepository.findByNickname(nickname)
-                             .map(customer -> customer.getId() != id)
-                             .orElse(false);
-  }
-
-  /**
-   * 해당 nickname을 가진 customer가 있는지 확인합니다.
-   *
-   * @param nickname
-   * @return 존재할 경우 true
-   */
-  public boolean isDuplicateNickname(String nickname) {
-    return customerRepository.findByNickname(nickname).isPresent();
-  }
-
-  /**
-   * 기존 ID를 제외하고, 해당 email 을 가진 customer가 있는지 확인합니다.
-   *
-   * @param id
-   * @param email
-   * @return 존재할 경우 true
-   */
-  public boolean isDuplicateEmail(Long id, String email) {
-    return customerRepository.findByEmail(email)
-                             .map(customer -> customer.getId() != id)
-                             .orElse(false);
-  }
-
-  /**
-   * 해당 email을 가진 customer가 있는지 확인합니다.
-   *
-   * @param email
-   * @return 존재할 경우 true
-   */
-  public boolean isDuplicateEmail(String email) {
-    return customerRepository.findByEmail(email).isPresent();
   }
 }
