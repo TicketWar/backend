@@ -30,7 +30,7 @@ public class CustomerService {
    * @throws BadRequestException
    */
   @Transactional
-  public boolean signUp(CustomerReqDto customerReqDto) throws BadRequestException {
+  public Customer signUp(CustomerReqDto customerReqDto) throws BadRequestException {
     final String nickname = customerReqDto.getNickname();
     final String email = customerReqDto.getEmail();
 
@@ -40,10 +40,7 @@ public class CustomerService {
     if (isDuplicateEmail(email)) {
       throw new BadRequestException("Duplicated email");
     }
-
-    final Customer newCustomer = customerReqDto.toEntity();
-    customerRepository.save(newCustomer);
-    return true;
+    return customerRepository.save(customerReqDto.toEntity());
   }
 
   /**
@@ -56,7 +53,7 @@ public class CustomerService {
    * @throws BadRequestException
    */
   @Transactional
-  public boolean update(Long id, CustomerReqDto customerReqDto) throws BadRequestException {
+  public Customer update(Long id, CustomerReqDto customerReqDto) throws BadRequestException {
     final Customer customer = customerRepository.findById(id)
                                                 .orElseThrow(() -> new BadRequestException(
                                                     "Not exist customer id"));
@@ -71,7 +68,7 @@ public class CustomerService {
     }
     customer.setNickname(updateNickname);
     customer.setEmail(updateEmail);
-    return true;
+    return customerRepository.save(customer);
   }
 
   /**
