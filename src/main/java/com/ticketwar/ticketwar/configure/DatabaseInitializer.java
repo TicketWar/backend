@@ -22,6 +22,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 public class DatabaseInitializer implements CommandLineRunner {
+
   private final PerformanceRepository performanceRepository;
   private final TicketRepository ticketRepository;
   private final CustomerRepository customerRepository;
@@ -47,20 +48,20 @@ public class DatabaseInitializer implements CommandLineRunner {
     Performance performance =
         performanceRepository.save(
             Performance.builder()
-                .name("아이유 H.E.R")
-                .ticketingStartAt(
-                    Year.of(2002)
-                        .atMonth(6)
-                        .atDay(18)
-                        .atTime(20, 30)
-                        .atZone(ZoneId.of("Asia/Seoul")))
-                .ticketingEndAt(
-                    Year.of(2002)
-                        .atMonth(6)
-                        .atDay(18)
-                        .atTime(20, 30)
-                        .atZone(ZoneId.of("Asia/Seoul")))
-                .build());
+                       .name("아이유 H.E.R")
+                       .ticketingStartAt(
+                           Year.of(2002)
+                               .atMonth(6)
+                               .atDay(18)
+                               .atTime(20, 30)
+                               .atZone(ZoneId.of("Asia/Seoul")))
+                       .ticketingEndAt(
+                           Year.of(2002)
+                               .atMonth(6)
+                               .atDay(18)
+                               .atTime(20, 30)
+                               .atZone(ZoneId.of("Asia/Seoul")))
+                       .build());
 
     Customer customer =
         customerRepository.save(

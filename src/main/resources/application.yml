@@ -9,9 +9,9 @@ spring:
     name: TicketWar
   profiles:
     group:
-      profile_local : local, log
-      profile_dev : dev, log
-      profile_prod : prod
+      profile_local: local, log
+      profile_dev: dev, log
+      profile_prod: prod
     #######################
     active: profile_local
     #######################

@@ -12,6 +12,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 public abstract class UpdatedTimeTrackable {
+
   @LastModifiedDate
   @Column(name = "update_at", nullable = false)
   private LocalDateTime updatedAt;
