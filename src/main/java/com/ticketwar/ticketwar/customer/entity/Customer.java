@@ -31,9 +31,16 @@ public class Customer extends CreatedAndUpdatedTimeTrackable {
   private String email;
 
   @Builder
-  protected Customer(@NonNull String nickname, @NonNull String email) {
-    this.nickname = nickname;
-    this.email = email;
+  protected Customer(Long id, @NonNull String nickname, @NonNull String email) {
+    if (id != null) {
+      this.setId(id);
+    }
+    this.setNickname(nickname);
+    this.setEmail(email);
+  }
+
+  public void setId(@NonNull Long id) {
+    this.id = id;
   }
 
   public void setNickname(@NonNull String nickname) {
