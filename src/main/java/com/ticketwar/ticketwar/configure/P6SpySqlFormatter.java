@@ -13,6 +13,9 @@ import org.hibernate.engine.jdbc.internal.FormatStyle;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
+/**
+ * Jdbc가 DB Connection을 얻은 이후에 로깅 포맷을 P6SpyOptions가 가로채도록 하는 Bean입니다.
+ */
 @Profile({"default", "local", "dev"}) // WARN: Do not use in production mode.
 @Component
 public class P6SpySqlFormatter extends JdbcEventListener implements MessageFormattingStrategy {
@@ -23,7 +26,8 @@ public class P6SpySqlFormatter extends JdbcEventListener implements MessageForma
   }
 
   @Override
-  public String formatMessage(int connectionId, String now, long elapsed, String category, String prepared, String sql, String url) {
+  public String formatMessage(int connectionId, String now, long elapsed, String category,
+      String prepared, String sql, String url) {
     return highlight(format(category, sql));
   }
 
@@ -33,7 +37,7 @@ public class P6SpySqlFormatter extends JdbcEventListener implements MessageForma
 
   private String format(String category, String sql) {
     if (hasText(sql) && isStatement(category)) {
-      if (isDDL(trim(sql))) {
+      if (isDdl(trim(sql))) {
         return FormatStyle.DDL.getFormatter().format(sql);
       }
       return FormatStyle.BASIC.getFormatter().format(sql);
@@ -41,11 +45,11 @@ public class P6SpySqlFormatter extends JdbcEventListener implements MessageForma
     return sql;
   }
 
-  private static boolean isDDL(String trimmedSQL) {
-    return trimmedSQL.startsWith("create")
-        || trimmedSQL.startsWith("alter")
-        || trimmedSQL.startsWith("drop")
-        || trimmedSQL.startsWith("comment");
+  private static boolean isDdl(String trimmedSql) {
+    return trimmedSql.startsWith("create")
+        || trimmedSql.startsWith("alter")
+        || trimmedSql.startsWith("drop")
+        || trimmedSql.startsWith("comment");
   }
 
   private static String trim(String sql) {
