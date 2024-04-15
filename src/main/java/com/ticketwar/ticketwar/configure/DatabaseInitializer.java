@@ -17,10 +17,12 @@ import java.time.Year;
 import java.time.ZoneId;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
+@Profile("disabled") // this bean is disabled.
 public class DatabaseInitializer implements CommandLineRunner {
 
   private final PerformanceRepository performanceRepository;
