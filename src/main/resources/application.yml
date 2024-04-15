@@ -1,17 +1,18 @@
 spring:
   config:
     import:
-      - classpath:/yaml/local.yml
-      - classpath:/yaml/dev.yml
-      - classpath:/yaml/prod.yml
-      - classpath:/yaml/log.yml
+      - classpath:/yaml/application-local.yml
+      - classpath:/yaml/application-dev.yml
+      - classpath:/yaml/application-prod.yml
+      - classpath:/yaml/application-log.yml
   application:
     name: TicketWar
+
   profiles:
     group:
-      profile_local: local, log
-      profile_dev: dev, log
-      profile_prod: prod
+      local: application-local, application-log
+      dev: application-dev, application-log
+      prod: application-prod
     #######################
-    active: profile_local
+    active: local
     #######################

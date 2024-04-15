@@ -1,0 +1,19 @@
+# ---------------------------------
+# sql log level setting
+# ---------------------------------
+decorator:
+  datasource:
+    p6spy:
+      enable-logging: true
+spring:
+  config:
+    activate:
+      on-profile: log
+  jpa:
+    show-sql: false # (1) turned off explicitly
+    properties:
+      hibernate: # use P6Spy formatter instead
+        show_sql: false # (2) turned off explicitly
+        # format_sql: true
+        # highlight_sql: true
+        # use_sql_comments: true
