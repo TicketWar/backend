@@ -1,21 +1,23 @@
 package com.ticketwar.ticketwar.customer.repository;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.*;
 
+import com.ticketwar.ticketwar.configure.P6SpySqlFormatter;
 import com.ticketwar.ticketwar.customer.entity.Customer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 @DataJpaTest
+@ImportAutoConfiguration(P6SpySqlFormatter.class)
 class CustomerRepositoryTest {
 
   @Autowired
   private CustomerRepository repository;
   private Customer customer;
-  private Customer customerInvalid;
 
   @BeforeEach
   public void setUp() {
@@ -23,37 +25,31 @@ class CustomerRepositoryTest {
                        .nickname("sungjpar")
                        .email("sungjpar@test.com")
                        .build();
-    customerInvalid = Customer.builder()
-                              .nickname("test")
-                              .email("test@test.com")
-                              .build();
   }
 
   @DisplayName("Test find by id")
   @Test
   public void test_find_by_id() {
-    Customer saved = repository.saveAndFlush(customer);
-    Customer c = repository.findById(saved.getId()).orElse(customerInvalid);
+    Customer savedCustomer = repository.save(customer);
 
-    assertEquals(c, customer);
+    assertThat(repository.findById(savedCustomer.getId()))
+        .hasValue(savedCustomer);
   }
 
   @DisplayName("Test find by Nickname")
   @Test
   public void test_find_by_nickname() {
-    Customer saved = repository.saveAndFlush(customer);
-    Customer c = repository.findByNickname(saved.getNickname()).orElse(customerInvalid);
+    Customer savedCustomer = repository.save(customer);
 
-    assertEquals(customer.getEmail(), c.getEmail());
-    assertEquals(customer.getNickname(), c.getNickname());
-    assertEquals(saved.getId(), c.getId());
+    assertThat(repository.findByNickname(savedCustomer.getNickname()))
+        .hasValue(savedCustomer);
   }
 
   @DisplayName("Test find by Nickname not exist case")
   @Test
   public void test_find_by_nickname_not_exist() {
-    Customer saved = repository.saveAndFlush(customer);
 
-    assertEquals(repository.findByNickname("test").isPresent(), false);
+    assertThat(repository.findByNickname("test"))
+        .isNotPresent();
   }
 }
