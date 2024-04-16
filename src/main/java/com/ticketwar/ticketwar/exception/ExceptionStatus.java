@@ -5,29 +5,28 @@ import org.springframework.http.HttpStatus;
 
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum ExceptionStatus {
-    USER_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 유저입니다."),
-    ;
+  USER_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 유저입니다."),
+  ;
 
+  private final int code;
+  private final String msg;
+  private final String err;
 
-    final private int code;
-    final private String msg;
-    final private String err;
+  ExceptionStatus(HttpStatus httpStatus, String msg) {
+    this.code = httpStatus.value();
+    this.msg = msg;
+    this.err = httpStatus.getReasonPhrase();
+  }
 
-    ExceptionStatus(HttpStatus httpStatus, String msg) {
-        this.code = httpStatus.value();
-        this.msg = msg;
-        this.err = httpStatus.getReasonPhrase();
-    }
+  public int getCode() {
+    return code;
+  }
 
-    public int getCode() {
-        return code;
-    }
+  public String getMsg() {
+    return msg;
+  }
 
-    public String getMsg() {
-        return msg;
-    }
-
-    public String getErr() {
-        return err;
-    }
+  public String getErr() {
+    return err;
+  }
 }
