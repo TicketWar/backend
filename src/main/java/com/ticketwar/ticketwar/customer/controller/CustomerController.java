@@ -22,7 +22,7 @@ import org.springframework.web.util.UriComponentsBuilder;
  * Customer 관련 정보에 대한 Rest Controller
  */
 @RestController
-@RequestMapping("/customer")
+@RequestMapping("/customers")
 @RequiredArgsConstructor
 public class CustomerController {
 

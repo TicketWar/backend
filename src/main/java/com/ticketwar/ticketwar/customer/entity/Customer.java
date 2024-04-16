@@ -30,13 +30,17 @@ public class Customer extends CreatedAndUpdatedTimeTrackable {
   @Column(name = "email", length = 100, nullable = false, unique = true)
   private String email;
 
+  @Column(name = "password", length = 20, nullable = false)
+  private String password; // have to be encrypted
+
   @Builder
-  protected Customer(Long id, @NonNull String nickname, @NonNull String email) {
+  protected Customer(Long id, @NonNull String nickname, @NonNull String email, String password) {
     if (id != null) {
       this.setId(id);
     }
     this.setNickname(nickname);
     this.setEmail(email);
+    this.setPassword(password);
   }
 
   public void setId(@NonNull Long id) {
@@ -48,7 +52,10 @@ public class Customer extends CreatedAndUpdatedTimeTrackable {
   }
 
   public void setEmail(@NonNull String email) {
-    // have to verify email by regex
     this.email = email;
+  }
+
+  public void setPassword(@NonNull String password) {
+    this.password = password;
   }
 }

@@ -1,6 +1,7 @@
 package com.ticketwar.ticketwar.order.entity;
 
 import com.ticketwar.ticketwar.customer.entity.Customer;
+import com.ticketwar.ticketwar.performance.entity.Performance;
 import com.ticketwar.ticketwar.ticket.entity.Ticket;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -8,8 +9,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -27,8 +28,6 @@ import lombok.NonNull;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Order {
 
-  @ManyToMany(mappedBy = "orders") // in Ticket.java
-  List<Ticket> tickets = new ArrayList<>();
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   @Column(name = "order_id")
@@ -36,12 +35,19 @@ public class Order {
   @ManyToOne
   @JoinColumn(name = "user_id", nullable = false)
   private Customer customer;
+  @ManyToOne
+  @JoinColumn(name = "performance_id", nullable = false)
+  private Performance performance;
+  @OneToMany(mappedBy = "order")
+  List<Ticket> tickets = new ArrayList<>();
   @Column(name = "ordered_at", nullable = false)
   private LocalDateTime orderedAt;
 
   @Builder
-  protected Order(@NonNull Customer customer, @NonNull LocalDateTime orderedAt) {
+  protected Order(@NonNull Customer customer, @NonNull Performance performance,
+      @NonNull LocalDateTime orderedAt) {
     this.customer = customer;
+    this.performance = performance;
     this.orderedAt = orderedAt;
   }
 
