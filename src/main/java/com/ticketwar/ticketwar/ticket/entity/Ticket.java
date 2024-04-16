@@ -6,6 +6,7 @@ import com.ticketwar.ticketwar.performance.entity.Performance;
 import com.ticketwar.ticketwar.seat.entity.Seat;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -30,13 +31,13 @@ public class Ticket extends CreatedTimeTrackable {
   @GeneratedValue(strategy = GenerationType.AUTO)
   @Column(name = "ticket_id")
   private Long id;
-  @OneToOne
+  @OneToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "seat_id", nullable = false)
   private Seat seat;
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "performance_id", nullable = false)
   private Performance performance;
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "order_id", nullable = false)
   private Order order;
 

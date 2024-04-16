@@ -5,6 +5,7 @@ import com.ticketwar.ticketwar.performance.entity.Performance;
 import com.ticketwar.ticketwar.ticket.entity.Ticket;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -32,14 +33,18 @@ public class Order {
   @GeneratedValue(strategy = GenerationType.AUTO)
   @Column(name = "order_id")
   private Long id;
-  @ManyToOne
+
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "user_id", nullable = false)
   private Customer customer;
-  @ManyToOne
+
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "performance_id", nullable = false)
   private Performance performance;
-  @OneToMany(mappedBy = "order")
+
+  @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
   List<Ticket> tickets = new ArrayList<>();
+  
   @Column(name = "ordered_at", nullable = false)
   private LocalDateTime orderedAt;
 
