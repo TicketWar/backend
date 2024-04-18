@@ -1,11 +1,11 @@
-package com.ticketwar.ticketwar.customer.service;
+package com.ticketwar.ticketwar.user.service;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 
-import com.ticketwar.ticketwar.customer.entity.Customer;
-import com.ticketwar.ticketwar.customer.repository.CustomerRepository;
+import com.ticketwar.ticketwar.user.entity.User;
+import com.ticketwar.ticketwar.user.repository.UserRepository;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -21,27 +21,28 @@ import org.mockito.quality.Strictness;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-class CustomerQueryServiceTest {
+class UserQueryServiceTest {
 
   @InjectMocks
-  private CustomerQueryService service;
+  private UserQueryService service;
   @Mock
-  private CustomerRepository repository;
+  private UserRepository repository;
 
   @Nested
   @DisplayName("닉네임 중복 검사")
   public class Test_is_duplicate_nickname {
 
-    private Customer customer;
+    private User user;
 
     @BeforeEach
     @Test
     public void setUp() {
-      customer = Customer.builder()
-                         .id(1L)
-                         .nickname("test")
-                         .email("test@test.com")
-                         .build();
+      user = User.builder()
+                 .id(1L)
+                 .nickname("test")
+                 .email("test@test.com")
+                 .password("password")
+                 .build();
     }
 
     @Nested
@@ -64,9 +65,9 @@ class CustomerQueryServiceTest {
       public void test_duplicated_case() {
         // given
         BDDMockito.given(repository.findByNickname(any(String.class)))
-                  .willReturn(Optional.of(customer));
+                  .willReturn(Optional.of(user));
         // when
-        boolean result = service.isDuplicateNickname(customer.getNickname());
+        boolean result = service.isDuplicateNickname(user.getNickname());
         // then
         assertTrue(result);
       }
@@ -82,7 +83,7 @@ class CustomerQueryServiceTest {
         // given
         BDDMockito.given(repository.findByNickname(any(String.class))).willReturn(Optional.empty());
         // when
-        boolean result = service.isDuplicateNickname(customer.getId(), "not_exist");
+        boolean result = service.isDuplicateNickname(user.getId(), "not_exist");
         // then
         assertFalse(result);
       }
@@ -92,9 +93,9 @@ class CustomerQueryServiceTest {
       public void test_identical_nickname() {
         // given
         BDDMockito.given(repository.findByNickname(any(String.class)))
-                  .willReturn(Optional.of(customer));
+                  .willReturn(Optional.of(user));
         // when
-        boolean result = service.isDuplicateNickname(customer.getId(), customer.getNickname());
+        boolean result = service.isDuplicateNickname(user.getId(), user.getNickname());
         // then
         assertFalse(result);
       }
@@ -102,15 +103,16 @@ class CustomerQueryServiceTest {
       @Test
       public void test_duplicated_case() {
         // given
-        Customer duplicatedCustomer = Customer.builder()
-                                              .id(2L)
-                                              .nickname("test2")
-                                              .email("test2@test.com")
-                                              .build();
+        User duplicatedUser = User.builder()
+                                  .id(2L)
+                                  .nickname("test2")
+                                  .email("test2@test.com")
+                                  .password("test")
+                                  .build();
         BDDMockito.given(repository.findByNickname(any(String.class)))
-                  .willReturn(Optional.of(duplicatedCustomer));
+                  .willReturn(Optional.of(duplicatedUser));
         // when
-        boolean result = service.isDuplicateNickname(customer.getId(), customer.getNickname());
+        boolean result = service.isDuplicateNickname(user.getId(), user.getNickname());
         // then
         assertTrue(result);
       }
@@ -121,16 +123,17 @@ class CustomerQueryServiceTest {
   @DisplayName("이메일 중복 검사")
   public class Test_is_duplicate_email {
 
-    private Customer customer;
+    private User user;
 
     @BeforeEach
     @Test
     public void setUp() {
-      customer = Customer.builder()
-                         .id(1L)
-                         .nickname("test")
-                         .email("test@test.com")
-                         .build();
+      user = User.builder()
+                 .id(1L)
+                 .nickname("test")
+                 .email("test@test.com")
+                 .password("password")
+                 .build();
     }
 
     @Nested
@@ -153,9 +156,9 @@ class CustomerQueryServiceTest {
       public void test_duplicated_case() {
         // given
         BDDMockito.given(repository.findByEmail(any(String.class)))
-                  .willReturn(Optional.of(customer));
+                  .willReturn(Optional.of(user));
         // when
-        boolean result = service.isDuplicateEmail(customer.getEmail());
+        boolean result = service.isDuplicateEmail(user.getEmail());
         // then
         assertTrue(result);
       }
@@ -171,7 +174,7 @@ class CustomerQueryServiceTest {
         // given
         BDDMockito.given(repository.findByEmail(any(String.class))).willReturn(Optional.empty());
         // when
-        boolean result = service.isDuplicateEmail(customer.getId(), "not_exist_email@email.com");
+        boolean result = service.isDuplicateEmail(user.getId(), "not_exist_email@email.com");
         // then
         assertFalse(result);
       }
@@ -181,9 +184,9 @@ class CustomerQueryServiceTest {
       public void test_identical_nickname() {
         // given
         BDDMockito.given(repository.findByEmail(any(String.class)))
-                  .willReturn(Optional.of(customer));
+                  .willReturn(Optional.of(user));
         // when
-        boolean result = service.isDuplicateEmail(customer.getId(), customer.getEmail());
+        boolean result = service.isDuplicateEmail(user.getId(), user.getEmail());
         // then
         assertFalse(result);
       }
@@ -191,15 +194,16 @@ class CustomerQueryServiceTest {
       @Test
       public void test_duplicated_case() {
         // given
-        Customer duplicatedCustomer = Customer.builder()
-                                              .id(2L)
-                                              .nickname("test2")
-                                              .email("test2@test.com")
-                                              .build();
+        User duplicatedUser = User.builder()
+                                  .id(2L)
+                                  .nickname("test2")
+                                  .email("test2@test.com")
+                                  .password("test")
+                                  .build();
         BDDMockito.given(repository.findByEmail(any(String.class)))
-                  .willReturn(Optional.of(duplicatedCustomer));
+                  .willReturn(Optional.of(duplicatedUser));
         // when
-        boolean result = service.isDuplicateEmail(customer.getId(), customer.getEmail());
+        boolean result = service.isDuplicateEmail(user.getId(), user.getEmail());
         // then
         assertTrue(result);
       }

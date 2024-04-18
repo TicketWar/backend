@@ -3,6 +3,7 @@ package com.ticketwar.ticketwar.seat.entity;
 import com.ticketwar.ticketwar.performance.entity.Performance;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -17,7 +18,7 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 @Entity
-@Table(name = "SEAT")
+@Table(name = "SEATS")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Seat {
@@ -27,7 +28,7 @@ public class Seat {
   @Column(name = "seat_id")
   private Long id;
 
-  @ManyToOne // many seats have fk to one performance
+  @ManyToOne(fetch = FetchType.LAZY) // many seats have fk to one performance
   @JoinColumn(name = "performance_id", nullable = false)
   private Performance performance;
 
@@ -39,10 +40,14 @@ public class Seat {
 
   @Builder
   protected Seat(
-      @NonNull Performance performance, @NonNull String position, @NonNull SeatStatus seatStatus) {
-    this.performance = performance;
-    this.position = position;
-    this.seatStatus = seatStatus;
+      Long id,
+      @NonNull Performance performance,
+      @NonNull String position,
+      @NonNull SeatStatus seatStatus) {
+    setId(id);
+    setPerformance(performance);
+    setPosition(position);
+    setSeatStatus(seatStatus);
   }
 
   @Override
@@ -62,5 +67,21 @@ public class Seat {
   @Override
   public int hashCode() {
     return Objects.hash(id, performance, position, seatStatus);
+  }
+
+  public void setId(Long id) {
+    this.id = id;
+  }
+
+  public void setPerformance(@NonNull Performance performance) {
+    this.performance = performance;
+  }
+
+  public void setPosition(@NonNull String position) {
+    this.position = position;
+  }
+
+  public void setSeatStatus(@NonNull SeatStatus seatStatus) {
+    this.seatStatus = seatStatus;
   }
 }

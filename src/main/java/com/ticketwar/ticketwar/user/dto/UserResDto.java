@@ -1,4 +1,4 @@
-package com.ticketwar.ticketwar.customer.dto;
+package com.ticketwar.ticketwar.user.dto;
 
 import java.util.Objects;
 import lombok.AccessLevel;
@@ -12,14 +12,14 @@ import lombok.NonNull;
  */
 @Getter
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
-public class CustomerResDto {
+public class UserResDto {
 
   private Long id;
   private String nickname;
   private String email;
 
   @Builder
-  protected CustomerResDto(@NonNull Long id, @NonNull String nickname, @NonNull String email) {
+  protected UserResDto(@NonNull Long id, @NonNull String nickname, @NonNull String email) {
     this.id = id;
     this.nickname = nickname;
     this.email = email;
@@ -33,7 +33,7 @@ public class CustomerResDto {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    CustomerResDto that = (CustomerResDto) o;
+    UserResDto that = (UserResDto) o;
     return Objects.equals(nickname, that.nickname) && Objects.equals(email,
         that.email);
   }

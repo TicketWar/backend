@@ -6,17 +6,14 @@ import com.ticketwar.ticketwar.performance.entity.Performance;
 import com.ticketwar.ticketwar.seat.entity.Seat;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -25,32 +22,37 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 @Entity
-@Table(name = "TICKET")
+@Table(name = "TICKETS")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Ticket extends CreatedTimeTrackable {
 
-  @ManyToMany
-  @JoinTable(
-      name = "ORDER_TICKET",
-      joinColumns = @JoinColumn(name = "ticket_id"),
-      inverseJoinColumns = @JoinColumn(name = "order_id"))
-  private final List<Order> orders = new ArrayList<>();
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   @Column(name = "ticket_id")
   private Long id;
-  @OneToOne
+
+  @OneToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "seat_id", nullable = false)
   private Seat seat;
-  @ManyToOne
+
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "performance_id", nullable = false)
   private Performance performance;
 
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "order_id", nullable = false)
+  private Order order;
+
   @Builder
-  protected Ticket(@NonNull Seat seat, @NonNull Performance performance) {
-    this.seat = seat;
-    this.performance = performance;
+  protected Ticket(Long id,
+      @NonNull Seat seat,
+      @NonNull Performance performance,
+      @NonNull Order order) {
+    setId(id);
+    setSeat(seat);
+    setPerformance(performance);
+    setOrder(order);
   }
 
   @Override
@@ -62,13 +64,30 @@ public class Ticket extends CreatedTimeTrackable {
       return false;
     }
     Ticket ticket = (Ticket) o;
-    return Objects.equals(orders, ticket.orders) && Objects.equals(id, ticket.id)
+    return Objects.equals(order, ticket.order) && Objects.equals(id, ticket.id)
         && Objects.equals(seat, ticket.seat) && Objects.equals(performance,
         ticket.performance);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(orders, id, seat, performance);
+    return Objects.hash(order, id, seat, performance);
+  }
+
+  public void setId(Long id) {
+    this.id = id;
+  }
+
+  public void setSeat(@NonNull Seat seat) {
+    this.seat = seat;
+  }
+
+  public void setPerformance(@NonNull Performance performance) {
+    this.performance = performance;
+  }
+
+  public void setOrder(@NonNull Order order) {
+    this.order = order;
+    order.addTicket(this);
   }
 }
