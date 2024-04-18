@@ -41,6 +41,7 @@ class UserQueryServiceTest {
                  .id(1L)
                  .nickname("test")
                  .email("test@test.com")
+                 .password("password")
                  .build();
     }
 
@@ -106,6 +107,7 @@ class UserQueryServiceTest {
                                   .id(2L)
                                   .nickname("test2")
                                   .email("test2@test.com")
+                                  .password("test")
                                   .build();
         BDDMockito.given(repository.findByNickname(any(String.class)))
                   .willReturn(Optional.of(duplicatedUser));
@@ -130,6 +132,7 @@ class UserQueryServiceTest {
                  .id(1L)
                  .nickname("test")
                  .email("test@test.com")
+                 .password("password")
                  .build();
     }
 
@@ -195,6 +198,7 @@ class UserQueryServiceTest {
                                   .id(2L)
                                   .nickname("test2")
                                   .email("test2@test.com")
+                                  .password("test")
                                   .build();
         BDDMockito.given(repository.findByEmail(any(String.class)))
                   .willReturn(Optional.of(duplicatedUser));

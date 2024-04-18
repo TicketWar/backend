@@ -18,11 +18,16 @@ public class UserReqDto implements EntityConvertable<User> {
 
   private String nickname;
   private String email;
+  private String password;
 
   @Builder
-  protected UserReqDto(@NonNull String nickname, @NonNull String email) {
+  protected UserReqDto(
+      @NonNull String nickname,
+      @NonNull String email,
+      @NonNull String password) {
     this.nickname = nickname;
     this.email = email;
+    this.password = password;
   }
 
   @Override
@@ -30,6 +35,7 @@ public class UserReqDto implements EntityConvertable<User> {
     return User.builder()
                .nickname(getNickname())
                .email(getEmail())
+               .password(getPassword())
                .build();
   }
 

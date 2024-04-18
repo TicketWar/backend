@@ -55,11 +55,13 @@ class UserServiceTest {
       UserReqDto request = UserReqDto.builder()
                                      .nickname(nickname)
                                      .email(email)
+                                     .password("password")
                                      .build();
       User expect = User.builder()
                         .id(1L)
                         .nickname(nickname)
                         .email(email)
+                        .password("password")
                         .build();
       BDDMockito.given(queryService.isDuplicateNickname(any(String.class))).willReturn(false);
       BDDMockito.given(queryService.isDuplicateEmail(any(String.class))).willReturn(false);
@@ -76,6 +78,7 @@ class UserServiceTest {
       UserReqDto request = UserReqDto.builder()
                                      .nickname("sungjpar")
                                      .email("email@email.com")
+                                     .password("password")
                                      .build();
       BDDMockito.given(queryService.isDuplicateNickname(any(String.class))).willReturn(true);
       // when, then
@@ -88,6 +91,7 @@ class UserServiceTest {
       UserReqDto request = UserReqDto.builder()
                                      .nickname("sungjpar")
                                      .email("email@email.com")
+                                     .password("password")
                                      .build();
       BDDMockito.given(queryService.isDuplicateNickname(any(String.class))).willReturn(false);
       BDDMockito.given(queryService.isDuplicateEmail(any(String.class))).willReturn(true);
@@ -111,11 +115,13 @@ class UserServiceTest {
       UserReqDto request = UserReqDto.builder()
                                      .nickname(nickname)
                                      .email(email)
+                                     .password("password")
                                      .build();
       User expect = User.builder()
                         .id(1L)
                         .nickname(nickname)
                         .email(email)
+                        .password("password")
                         .build();
       BDDMockito.given(repository.findById(any(Long.class))).willReturn(Optional.of(expect));
       BDDMockito.given(queryService.isDuplicateNickname(any(Long.class), any(String.class)))
@@ -139,11 +145,13 @@ class UserServiceTest {
       UserReqDto request = UserReqDto.builder()
                                      .nickname(nickname)
                                      .email(email)
+                                     .password("password")
                                      .build();
       User expect = User.builder()
                         .id(1L)
                         .nickname(nickname)
                         .email(email)
+                        .password("password")
                         .build();
       BDDMockito.given(repository.findById(any(Long.class))).willReturn(Optional.of(expect));
       BDDMockito.given(queryService.isDuplicateNickname(any(Long.class), any(String.class)))
@@ -165,11 +173,13 @@ class UserServiceTest {
       UserReqDto request = UserReqDto.builder()
                                      .nickname(nickname)
                                      .email(email)
+                                     .password("password")
                                      .build();
       User expect = User.builder()
                         .id(1L)
                         .nickname(nickname)
                         .email(email)
+                        .password("password")
                         .build();
       BDDMockito.given(repository.findById(any(Long.class))).willReturn(Optional.of(expect));
       BDDMockito.given(queryService.isDuplicateNickname(any(Long.class), any(String.class)))
@@ -195,6 +205,7 @@ class UserServiceTest {
                  .id(1L)
                  .nickname("test")
                  .email("test@test.com")
+                 .password("password")
                  .build();
     }
 
@@ -245,6 +256,7 @@ class UserServiceTest {
                  .id(1L)
                  .nickname("test")
                  .email("test@test.com")
+                 .password("password")
                  .build();
     }
 
@@ -297,6 +309,7 @@ class UserServiceTest {
                  .id(1L)
                  .nickname("test")
                  .email("test@test.com")
+                 .password("password")
                  .build();
     }
 
