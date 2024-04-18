@@ -22,7 +22,7 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 @Entity
-@Table(name = "TICKET")
+@Table(name = "TICKETS")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Ticket extends CreatedTimeTrackable {

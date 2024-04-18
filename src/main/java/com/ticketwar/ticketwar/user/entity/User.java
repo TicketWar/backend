@@ -1,4 +1,4 @@
-package com.ticketwar.ticketwar.customer.entity;
+package com.ticketwar.ticketwar.user.entity;
 
 import com.ticketwar.ticketwar.common.entity.trackable.CreatedAndUpdatedTimeTrackable;
 import jakarta.persistence.Column;
@@ -14,14 +14,14 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 @Entity
-@Table(name = "CUSTOMER")
+@Table(name = "USERS")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Customer extends CreatedAndUpdatedTimeTrackable {
+public class User extends CreatedAndUpdatedTimeTrackable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
-  @Column(name = "customer_id")
+  @Column(name = "user_id")
   private Long id;
 
   @Column(name = "nickname", length = 20, nullable = false, unique = true)
@@ -34,7 +34,7 @@ public class Customer extends CreatedAndUpdatedTimeTrackable {
   private String password; // have to be encrypted
 
   @Builder
-  protected Customer(Long id, @NonNull String nickname, @NonNull String email, String password) {
+  protected User(Long id, @NonNull String nickname, @NonNull String email, String password) {
     if (id != null) {
       this.setId(id);
     }

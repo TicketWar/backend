@@ -1,8 +1,8 @@
 package com.ticketwar.ticketwar.order.entity;
 
-import com.ticketwar.ticketwar.customer.entity.Customer;
 import com.ticketwar.ticketwar.performance.entity.Performance;
 import com.ticketwar.ticketwar.ticket.entity.Ticket;
+import com.ticketwar.ticketwar.user.entity.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -24,7 +24,7 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 @Entity
-@Table(name = "CUSTOMER_ORDER")
+@Table(name = "ORDERS")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Order {
@@ -36,7 +36,7 @@ public class Order {
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "user_id", nullable = false)
-  private Customer customer;
+  private User user;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "performance_id", nullable = false)
@@ -44,14 +44,14 @@ public class Order {
 
   @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
   List<Ticket> tickets = new ArrayList<>();
-  
+
   @Column(name = "ordered_at", nullable = false)
   private LocalDateTime orderedAt;
 
   @Builder
-  protected Order(@NonNull Customer customer, @NonNull Performance performance,
+  protected Order(@NonNull User user, @NonNull Performance performance,
       @NonNull LocalDateTime orderedAt) {
-    this.customer = customer;
+    this.user = user;
     this.performance = performance;
     this.orderedAt = orderedAt;
   }
@@ -66,12 +66,12 @@ public class Order {
     }
     Order order = (Order) o;
     return Objects.equals(tickets, order.tickets) && Objects.equals(id, order.id)
-        && Objects.equals(customer, order.customer) && Objects.equals(orderedAt,
+        && Objects.equals(user, order.user) && Objects.equals(orderedAt,
         order.orderedAt);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(tickets, id, customer, orderedAt);
+    return Objects.hash(tickets, id, user, orderedAt);
   }
 }

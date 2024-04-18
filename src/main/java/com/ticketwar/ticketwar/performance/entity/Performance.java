@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 @Entity
-@Table(name = "PERFORMANCE")
+@Table(name = "PERFORMANCES")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Performance extends CreatedAndUpdatedTimeTrackable {

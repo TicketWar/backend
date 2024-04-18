@@ -1,7 +1,7 @@
-package com.ticketwar.ticketwar.customer.dto;
+package com.ticketwar.ticketwar.user.dto;
 
 import com.ticketwar.ticketwar.common.interfaces.EntityConvertable;
-import com.ticketwar.ticketwar.customer.entity.Customer;
+import com.ticketwar.ticketwar.user.entity.User;
 import java.util.Objects;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -14,23 +14,23 @@ import lombok.NonNull;
  */
 @Getter
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
-public class CustomerReqDto implements EntityConvertable<Customer> {
+public class UserReqDto implements EntityConvertable<User> {
 
   private String nickname;
   private String email;
 
   @Builder
-  protected CustomerReqDto(@NonNull String nickname, @NonNull String email) {
+  protected UserReqDto(@NonNull String nickname, @NonNull String email) {
     this.nickname = nickname;
     this.email = email;
   }
 
   @Override
-  public Customer toEntity() {
-    return Customer.builder()
-                   .nickname(getNickname())
-                   .email(getEmail())
-                   .build();
+  public User toEntity() {
+    return User.builder()
+               .nickname(getNickname())
+               .email(getEmail())
+               .build();
   }
 
   @Override
@@ -41,7 +41,7 @@ public class CustomerReqDto implements EntityConvertable<Customer> {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    CustomerReqDto that = (CustomerReqDto) o;
+    UserReqDto that = (UserReqDto) o;
     return Objects.equals(nickname, that.nickname) && Objects.equals(email,
         that.email);
   }

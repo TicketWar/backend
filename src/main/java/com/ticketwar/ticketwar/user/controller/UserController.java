@@ -1,9 +1,9 @@
-package com.ticketwar.ticketwar.customer.controller;
+package com.ticketwar.ticketwar.user.controller;
 
-import com.ticketwar.ticketwar.customer.dto.CustomerReqDto;
-import com.ticketwar.ticketwar.customer.dto.CustomerResDto;
-import com.ticketwar.ticketwar.customer.entity.Customer;
-import com.ticketwar.ticketwar.customer.service.CustomerService;
+import com.ticketwar.ticketwar.user.dto.UserReqDto;
+import com.ticketwar.ticketwar.user.dto.UserResDto;
+import com.ticketwar.ticketwar.user.entity.User;
+import com.ticketwar.ticketwar.user.service.UserService;
 import java.net.URI;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.BadRequestException;
@@ -22,45 +22,45 @@ import org.springframework.web.util.UriComponentsBuilder;
  * Customer 관련 정보에 대한 Rest Controller
  */
 @RestController
-@RequestMapping("/customers")
+@RequestMapping("/users")
 @RequiredArgsConstructor
-public class CustomerController {
+public class UserController {
 
-  private final CustomerService customerService;
+  private final UserService userService;
 
   // 이후 auth controller 쪽으로 빠져야함.
   @PostMapping("/signup")
-  public ResponseEntity<CustomerResDto> signUp(@RequestBody CustomerReqDto customerReqDto)
+  public ResponseEntity<UserResDto> signUp(@RequestBody UserReqDto userReqDto)
       throws BadRequestException {
-    Customer newCustomer = customerService.signUp(customerReqDto);
+    User newUser = userService.signUp(userReqDto);
     URI location = UriComponentsBuilder
-        .fromPath("/customer/" + newCustomer.getId())
+        .fromPath("/users/" + newUser.getId())
         .build().toUri();
 
     return ResponseEntity.created(location).build();
   }
 
   @PatchMapping("/{id}")
-  public Customer update(@PathVariable("id") Long id, @RequestBody CustomerReqDto customerReqDto)
+  public User update(@PathVariable("id") Long id, @RequestBody UserReqDto userReqDto)
       throws BadRequestException {
-    return customerService.update(id, customerReqDto);
+    return userService.update(id, userReqDto);
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<CustomerResDto> getById(@PathVariable("id") Long id)
+  public ResponseEntity<UserResDto> getById(@PathVariable("id") Long id)
       throws NotFoundException {
-    return ResponseEntity.ok(customerService.getById(id));
+    return ResponseEntity.ok(userService.getById(id));
   }
 
   @GetMapping("/nickname/{nickname}")
-  public CustomerResDto getByNickname(@PathVariable("nickname") String nickname)
+  public UserResDto getByNickname(@PathVariable("nickname") String nickname)
       throws NotFoundException {
-    return customerService.getByNickname(nickname);
+    return userService.getByNickname(nickname);
   }
 
   @GetMapping("/email/{email}")
-  public CustomerResDto getByEmail(@PathVariable("email") String email)
+  public UserResDto getByEmail(@PathVariable("email") String email)
       throws NotFoundException {
-    return customerService.getByEmail(email);
+    return userService.getByEmail(email);
   }
 }
