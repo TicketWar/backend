@@ -44,9 +44,7 @@ public class Seat {
       @NonNull Performance performance,
       @NonNull String position,
       @NonNull SeatStatus seatStatus) {
-    if (id != null) {
-      setId(id);
-    }
+    setId(id);
     setPerformance(performance);
     setPosition(position);
     setSeatStatus(seatStatus);
@@ -75,15 +73,15 @@ public class Seat {
     this.id = id;
   }
 
-  public void setPerformance(Performance performance) {
+  public void setPerformance(@NonNull Performance performance) {
     this.performance = performance;
   }
 
-  public void setPosition(String position) {
+  public void setPosition(@NonNull String position) {
     this.position = position;
   }
 
-  public void setSeatStatus(SeatStatus seatStatus) {
+  public void setSeatStatus(@NonNull SeatStatus seatStatus) {
     this.seatStatus = seatStatus;
   }
 }

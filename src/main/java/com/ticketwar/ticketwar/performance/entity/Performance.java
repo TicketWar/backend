@@ -41,9 +41,7 @@ public class Performance extends CreatedAndUpdatedTimeTrackable {
       @NonNull String name,
       @NonNull ZonedDateTime ticketingStartAt,
       @NonNull ZonedDateTime ticketingEndAt) {
-    if (id != null) {
-      setId(id);
-    }
+    setId(id);
     setName(name);
     setTicketingStartAt(ticketingStartAt);
     setTicketingEndAt(ticketingEndAt);
@@ -72,15 +70,15 @@ public class Performance extends CreatedAndUpdatedTimeTrackable {
     this.id = id;
   }
 
-  public void setName(String name) {
+  public void setName(@NonNull String name) {
     this.name = name;
   }
 
-  public void setTicketingStartAt(ZonedDateTime ticketingStartAt) {
+  public void setTicketingStartAt(@NonNull ZonedDateTime ticketingStartAt) {
     this.ticketingStartAt = ticketingStartAt;
   }
 
-  public void setTicketingEndAt(ZonedDateTime ticketingEndAt) {
+  public void setTicketingEndAt(@NonNull ZonedDateTime ticketingEndAt) {
     this.ticketingEndAt = ticketingEndAt;
   }
 }

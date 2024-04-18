@@ -39,7 +39,7 @@ public class Ticket extends CreatedTimeTrackable {
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "performance_id", nullable = false)
   private Performance performance;
-  
+
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "order_id", nullable = false)
   private Order order;
@@ -49,9 +49,7 @@ public class Ticket extends CreatedTimeTrackable {
       @NonNull Seat seat,
       @NonNull Performance performance,
       @NonNull Order order) {
-    if (id != null) {
-      setId(id);
-    }
+    setId(id);
     setSeat(seat);
     setPerformance(performance);
     setOrder(order);
@@ -80,15 +78,15 @@ public class Ticket extends CreatedTimeTrackable {
     this.id = id;
   }
 
-  public void setSeat(Seat seat) {
+  public void setSeat(@NonNull Seat seat) {
     this.seat = seat;
   }
 
-  public void setPerformance(Performance performance) {
+  public void setPerformance(@NonNull Performance performance) {
     this.performance = performance;
   }
 
-  public void setOrder(Order order) {
+  public void setOrder(@NonNull Order order) {
     this.order = order;
     order.addTicket(this);
   }

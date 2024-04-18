@@ -54,9 +54,7 @@ public class Order {
       @NonNull User user,
       @NonNull Performance performance,
       @NonNull LocalDateTime orderedAt) {
-    if (id != null) {
-      setId(id);
-    }
+    setId(id);
     setUser(user);
     setPerformance(performance);
     setTickets(new ArrayList<>());
@@ -86,28 +84,31 @@ public class Order {
     this.id = id;
   }
 
-  public void setUser(User user) {
+  public void setUser(@NonNull User user) {
     this.user = user;
   }
 
-  public void setPerformance(Performance performance) {
+  public void setPerformance(@NonNull Performance performance) {
     this.performance = performance;
   }
 
   public void setTickets(List<Ticket> tickets) {
+    if (tickets == null) {
+      tickets = new ArrayList<>();
+    }
     this.tickets = tickets;
   }
 
-  public void addTicket(Ticket ticket) {
+  public void addTicket(@NonNull Ticket ticket) {
     this.tickets.remove(ticket);
     this.tickets.add(ticket);
   }
 
-  public void removeTicket(Ticket ticket) {
+  public void removeTicket(@NonNull Ticket ticket) {
     this.tickets.remove(ticket);
   }
 
-  public void setOrderedAt(LocalDateTime orderedAt) {
+  public void setOrderedAt(@NonNull LocalDateTime orderedAt) {
     this.orderedAt = orderedAt;
   }
 }
