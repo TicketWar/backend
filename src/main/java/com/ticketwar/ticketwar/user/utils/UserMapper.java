@@ -4,7 +4,7 @@ import com.ticketwar.ticketwar.user.dto.UserResDto;
 import com.ticketwar.ticketwar.user.entity.User;
 
 /**
- * Customer Entity를 DTO 로 변환하는 유틸리티 클래스
+ * User Entity를 DTO 로 변환하는 유틸리티 클래스
  */
 public class UserMapper {
 
