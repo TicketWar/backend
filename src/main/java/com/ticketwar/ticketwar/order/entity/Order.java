@@ -43,17 +43,24 @@ public class Order {
   private Performance performance;
 
   @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
-  List<Ticket> tickets = new ArrayList<>();
+  private List<Ticket> tickets = new ArrayList<>();
 
   @Column(name = "ordered_at", nullable = false)
   private LocalDateTime orderedAt;
 
   @Builder
-  protected Order(@NonNull User user, @NonNull Performance performance,
+  protected Order(
+      Long id,
+      @NonNull User user,
+      @NonNull Performance performance,
       @NonNull LocalDateTime orderedAt) {
-    this.user = user;
-    this.performance = performance;
-    this.orderedAt = orderedAt;
+    if (id != null) {
+      setId(id);
+    }
+    setUser(user);
+    setPerformance(performance);
+    setTickets(new ArrayList<>());
+    setPerformance(performance);
   }
 
   @Override
@@ -73,5 +80,34 @@ public class Order {
   @Override
   public int hashCode() {
     return Objects.hash(tickets, id, user, orderedAt);
+  }
+
+  public void setId(Long id) {
+    this.id = id;
+  }
+
+  public void setUser(User user) {
+    this.user = user;
+  }
+
+  public void setPerformance(Performance performance) {
+    this.performance = performance;
+  }
+
+  public void setTickets(List<Ticket> tickets) {
+    this.tickets = tickets;
+  }
+
+  public void addTicket(Ticket ticket) {
+    this.tickets.remove(ticket);
+    this.tickets.add(ticket);
+  }
+
+  public void removeTicket(Ticket ticket) {
+    this.tickets.remove(ticket);
+  }
+
+  public void setOrderedAt(LocalDateTime orderedAt) {
+    this.orderedAt = orderedAt;
   }
 }

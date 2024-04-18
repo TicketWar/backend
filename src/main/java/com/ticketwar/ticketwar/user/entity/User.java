@@ -34,7 +34,11 @@ public class User extends CreatedAndUpdatedTimeTrackable {
   private String password; // have to be encrypted
 
   @Builder
-  protected User(Long id, @NonNull String nickname, @NonNull String email, String password) {
+  protected User(
+      Long id,
+      @NonNull String nickname,
+      @NonNull String email,
+      String password) {
     if (id != null) {
       this.setId(id);
     }

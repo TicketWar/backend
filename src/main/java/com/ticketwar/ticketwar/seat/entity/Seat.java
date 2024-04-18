@@ -40,10 +40,16 @@ public class Seat {
 
   @Builder
   protected Seat(
-      @NonNull Performance performance, @NonNull String position, @NonNull SeatStatus seatStatus) {
-    this.performance = performance;
-    this.position = position;
-    this.seatStatus = seatStatus;
+      Long id,
+      @NonNull Performance performance,
+      @NonNull String position,
+      @NonNull SeatStatus seatStatus) {
+    if (id != null) {
+      setId(id);
+    }
+    setPerformance(performance);
+    setPosition(position);
+    setSeatStatus(seatStatus);
   }
 
   @Override
@@ -63,5 +69,21 @@ public class Seat {
   @Override
   public int hashCode() {
     return Objects.hash(id, performance, position, seatStatus);
+  }
+
+  public void setId(Long id) {
+    this.id = id;
+  }
+
+  public void setPerformance(Performance performance) {
+    this.performance = performance;
+  }
+
+  public void setPosition(String position) {
+    this.position = position;
+  }
+
+  public void setSeatStatus(SeatStatus seatStatus) {
+    this.seatStatus = seatStatus;
   }
 }

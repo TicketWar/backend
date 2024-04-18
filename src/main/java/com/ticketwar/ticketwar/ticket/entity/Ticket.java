@@ -42,7 +42,13 @@ public class Ticket extends CreatedTimeTrackable {
   private Order order;
 
   @Builder
-  protected Ticket(@NonNull Seat seat, @NonNull Performance performance, @NonNull Order order) {
+  protected Ticket(Long id,
+      @NonNull Seat seat,
+      @NonNull Performance performance,
+      @NonNull Order order) {
+    if (id != null) {
+      setId(id);
+    }
     setSeat(seat);
     setPerformance(performance);
     setOrder(order);
@@ -81,5 +87,6 @@ public class Ticket extends CreatedTimeTrackable {
 
   public void setOrder(Order order) {
     this.order = order;
+    order.addTicket(this);
   }
 }

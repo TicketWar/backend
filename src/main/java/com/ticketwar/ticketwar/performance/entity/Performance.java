@@ -37,12 +37,16 @@ public class Performance extends CreatedAndUpdatedTimeTrackable {
 
   @Builder
   protected Performance(
+      Long id,
       @NonNull String name,
       @NonNull ZonedDateTime ticketingStartAt,
       @NonNull ZonedDateTime ticketingEndAt) {
-    this.name = name;
-    this.ticketingStartAt = ticketingStartAt;
-    this.ticketingEndAt = ticketingEndAt;
+    if (id != null) {
+      setId(id);
+    }
+    setName(name);
+    setTicketingStartAt(ticketingStartAt);
+    setTicketingEndAt(ticketingEndAt);
   }
 
   @Override
@@ -62,5 +66,21 @@ public class Performance extends CreatedAndUpdatedTimeTrackable {
   @Override
   public int hashCode() {
     return Objects.hash(id, name, ticketingStartAt, ticketingEndAt);
+  }
+
+  public void setId(Long id) {
+    this.id = id;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public void setTicketingStartAt(ZonedDateTime ticketingStartAt) {
+    this.ticketingStartAt = ticketingStartAt;
+  }
+
+  public void setTicketingEndAt(ZonedDateTime ticketingEndAt) {
+    this.ticketingEndAt = ticketingEndAt;
   }
 }
