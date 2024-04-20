@@ -40,20 +40,19 @@ public class UserController {
     return ResponseEntity.created(location).build();
   }
 
-  @PatchMapping("/{id}")
-  @Guard(value = RoleGuard.class, args = {"ADMIN"})
-  public User update(@PathVariable("id") Long id, @RequestBody UserReqDto userReqDto)
-      throws BadRequestException {
-    return userService.update(id, userReqDto);
-  }
-
-
-  @GetMapping("/{id}")
+  @GetMapping("/me")
   @Guard(JwtGuard.class)
   public ResponseEntity<UserResDto> getById(@UserData JwtData jwtData)
       throws NotFoundException {
     final Long id = jwtData.getId();
     return ResponseEntity.ok(userService.getById(id));
+  }
+  
+  @PatchMapping("/{id}")
+  @Guard(value = RoleGuard.class, args = {"ADMIN"})
+  public User update(@PathVariable("id") Long id, @RequestBody UserReqDto userReqDto)
+      throws BadRequestException {
+    return userService.update(id, userReqDto);
   }
 
   @GetMapping("/{id}")
