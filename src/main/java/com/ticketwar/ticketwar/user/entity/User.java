@@ -2,21 +2,11 @@ package com.ticketwar.ticketwar.user.entity;
 
 import com.ticketwar.ticketwar.common.entity.trackable.CreatedAndUpdatedTimeTrackable;
 import com.ticketwar.ticketwar.order.entity.Order;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import lombok.*;
+
 import java.util.ArrayList;
 import java.util.List;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
 
 @Entity
 @Table(name = "USERS")
@@ -38,6 +28,9 @@ public class User extends CreatedAndUpdatedTimeTrackable {
   @Column(name = "password", length = 20, nullable = false)
   private String password; // have to be encrypted
 
+  @Column(name = "role", nullable = false)
+  private UserRole role;
+
   @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
   private List<Order> orders;
 
@@ -47,12 +40,14 @@ public class User extends CreatedAndUpdatedTimeTrackable {
       @NonNull String nickname,
       @NonNull String email,
       @NonNull String password,
+      UserRole role,
       List<Order> orders) {
     setId(id);
     setNickname(nickname);
     setEmail(email);
     setPassword(password);
     setOrders(orders);
+    setRole(role != null ? role : UserRole.USER);
   }
 
   public void setId(Long id) {
@@ -69,6 +64,10 @@ public class User extends CreatedAndUpdatedTimeTrackable {
 
   public void setPassword(@NonNull String password) {
     this.password = password;
+  }
+
+  public void setRole(@NonNull UserRole role) {
+    this.role = role;
   }
 
   public void setOrders(List<Order> orders) {

@@ -1,5 +1,7 @@
 package com.ticketwar.ticketwar.user.service;
 
+import com.ticketwar.ticketwar.exception.CustomException;
+import com.ticketwar.ticketwar.exception.ExceptionStatus;
 import com.ticketwar.ticketwar.user.dto.UserReqDto;
 import com.ticketwar.ticketwar.user.dto.UserResDto;
 import com.ticketwar.ticketwar.user.entity.User;
@@ -38,10 +40,10 @@ public class UserService {
     final String email = userReqDto.getEmail();
 
     if (userQueryService.isDuplicateNickname(nickname)) {
-      throw new BadRequestException("Duplicated nickname");
+      throw new CustomException(ExceptionStatus.DUPLICATED_NICKNAME);
     }
     if (userQueryService.isDuplicateEmail(email)) {
-      throw new BadRequestException("Duplicated email");
+      throw new CustomException(ExceptionStatus.DUPLICATED_EMAIL);
     }
     return userRepository.save(userReqDto.toEntity());
   }
@@ -64,10 +66,10 @@ public class UserService {
     final String updateEmail = userReqDto.getEmail();
 
     if (userQueryService.isDuplicateNickname(id, updateNickname)) {
-      throw new BadRequestException("Duplicated nickname");
+      throw new CustomException(ExceptionStatus.DUPLICATED_NICKNAME);
     }
     if (userQueryService.isDuplicateEmail(id, updateEmail)) {
-      throw new BadRequestException("Duplicated email");
+      throw new CustomException(ExceptionStatus.DUPLICATED_EMAIL);
     }
     user.setNickname(updateNickname);
     user.setEmail(updateEmail);
@@ -81,10 +83,12 @@ public class UserService {
    * @return
    * @throws NotFoundException
    */
-  public UserResDto getById(Long id) throws NotFoundException {
+  public UserResDto getById(Long id)
+      throws NotFoundException {
+
     return userRepository.findById(id)
                          .map(userMapper::mapToResDto)
-                         .orElseThrow(NotFoundException::new);
+                         .orElseThrow(CustomException.build(ExceptionStatus.USER_NOT_FOUND));
   }
 
   /**
@@ -97,7 +101,7 @@ public class UserService {
   public UserResDto getByNickname(String nickname) throws NotFoundException {
     return userRepository.findByNickname(nickname)
                          .map(userMapper::mapToResDto)
-                         .orElseThrow(NotFoundException::new);
+                         .orElseThrow(CustomException.build(ExceptionStatus.USER_NOT_FOUND));
   }
 
   /**
@@ -110,6 +114,6 @@ public class UserService {
   public UserResDto getByEmail(String email) throws NotFoundException {
     return userRepository.findByEmail(email)
                          .map(userMapper::mapToResDto)
-                         .orElseThrow(NotFoundException::new);
+                         .orElseThrow(CustomException.build(ExceptionStatus.USER_NOT_FOUND));
   }
 }

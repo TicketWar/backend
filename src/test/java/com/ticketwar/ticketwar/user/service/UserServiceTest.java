@@ -1,18 +1,13 @@
 package com.ticketwar.ticketwar.user.service;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
-
+import com.ticketwar.ticketwar.exception.CustomException;
+import com.ticketwar.ticketwar.exception.ExceptionStatus;
 import com.ticketwar.ticketwar.user.dto.UserReqDto;
 import com.ticketwar.ticketwar.user.dto.UserResDto;
 import com.ticketwar.ticketwar.user.entity.User;
 import com.ticketwar.ticketwar.user.repository.UserRepository;
 import com.ticketwar.ticketwar.user.utils.UserMapper;
 import jakarta.transaction.Transactional;
-import java.util.Optional;
-import org.apache.coyote.BadRequestException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -24,7 +19,11 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
-import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
+
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -53,16 +52,16 @@ class UserServiceTest {
       String email = "sungjpar@student.42seoul.kr";
       Long id = 1L;
       UserReqDto request = UserReqDto.builder()
-                                     .nickname(nickname)
-                                     .email(email)
-                                     .password("password")
-                                     .build();
+          .nickname(nickname)
+          .email(email)
+          .password("password")
+          .build();
       User expect = User.builder()
-                        .id(1L)
-                        .nickname(nickname)
-                        .email(email)
-                        .password("password")
-                        .build();
+          .id(1L)
+          .nickname(nickname)
+          .email(email)
+          .password("password")
+          .build();
       BDDMockito.given(queryService.isDuplicateNickname(any(String.class))).willReturn(false);
       BDDMockito.given(queryService.isDuplicateEmail(any(String.class))).willReturn(false);
       BDDMockito.given(repository.save(any(User.class))).willReturn(expect);
@@ -76,27 +75,27 @@ class UserServiceTest {
     public void test_sign_up_duplicate_nickname() {
       // given
       UserReqDto request = UserReqDto.builder()
-                                     .nickname("sungjpar")
-                                     .email("email@email.com")
-                                     .password("password")
-                                     .build();
+          .nickname("sungjpar")
+          .email("email@email.com")
+          .password("password")
+          .build();
       BDDMockito.given(queryService.isDuplicateNickname(any(String.class))).willReturn(true);
       // when, then
-      assertThrows(BadRequestException.class, () -> service.signUp(request));
+      assertThrows(CustomException.class, () -> service.signUp(request), ExceptionStatus.DUPLICATED_NICKNAME.getMsg());
     }
 
     @DisplayName("실패 - 이메일 중복")
     @Test
     public void test_sign_up_duplicate_email() {      // given
       UserReqDto request = UserReqDto.builder()
-                                     .nickname("sungjpar")
-                                     .email("email@email.com")
-                                     .password("password")
-                                     .build();
+          .nickname("sungjpar")
+          .email("email@email.com")
+          .password("password")
+          .build();
       BDDMockito.given(queryService.isDuplicateNickname(any(String.class))).willReturn(false);
       BDDMockito.given(queryService.isDuplicateEmail(any(String.class))).willReturn(true);
       // when, then
-      assertThrows(BadRequestException.class, () -> service.signUp(request));
+      assertThrows(CustomException.class, () -> service.signUp(request), ExceptionStatus.DUPLICATED_EMAIL.getMsg());
     }
 
   }
@@ -113,21 +112,21 @@ class UserServiceTest {
       String email = "sungjpar@student.42seoul.kr";
       Long id = 1L;
       UserReqDto request = UserReqDto.builder()
-                                     .nickname(nickname)
-                                     .email(email)
-                                     .password("password")
-                                     .build();
+          .nickname(nickname)
+          .email(email)
+          .password("password")
+          .build();
       User expect = User.builder()
-                        .id(1L)
-                        .nickname(nickname)
-                        .email(email)
-                        .password("password")
-                        .build();
+          .id(1L)
+          .nickname(nickname)
+          .email(email)
+          .password("password")
+          .build();
       BDDMockito.given(repository.findById(any(Long.class))).willReturn(Optional.of(expect));
       BDDMockito.given(queryService.isDuplicateNickname(any(Long.class), any(String.class)))
-                .willReturn(false);
+          .willReturn(false);
       BDDMockito.given(queryService.isDuplicateEmail(any(Long.class), any(String.class)))
-                .willReturn(false);
+          .willReturn(false);
       BDDMockito.given(repository.save(any(User.class))).willReturn(expect);
       // when
       User updatedUser = assertDoesNotThrow(() -> service.update(1L, request));
@@ -143,24 +142,24 @@ class UserServiceTest {
       String email = "sungjpar@student.42seoul.kr";
       Long id = 1L;
       UserReqDto request = UserReqDto.builder()
-                                     .nickname(nickname)
-                                     .email(email)
-                                     .password("password")
-                                     .build();
+          .nickname(nickname)
+          .email(email)
+          .password("password")
+          .build();
       User expect = User.builder()
-                        .id(1L)
-                        .nickname(nickname)
-                        .email(email)
-                        .password("password")
-                        .build();
+          .id(1L)
+          .nickname(nickname)
+          .email(email)
+          .password("password")
+          .build();
       BDDMockito.given(repository.findById(any(Long.class))).willReturn(Optional.of(expect));
       BDDMockito.given(queryService.isDuplicateNickname(any(Long.class), any(String.class)))
-                .willReturn(true);
+          .willReturn(true);
       BDDMockito.given(queryService.isDuplicateEmail(any(Long.class), any(String.class)))
-                .willReturn(false);
+          .willReturn(false);
       BDDMockito.given(repository.save(any(User.class))).willReturn(expect);
       // when then
-      assertThrows(BadRequestException.class, () -> service.update(1L, request));
+      assertThrows(CustomException.class, () -> service.update(1L, request), ExceptionStatus.DUPLICATED_NICKNAME.getMsg());
     }
 
     @Test
@@ -171,24 +170,24 @@ class UserServiceTest {
       String email = "sungjpar@student.42seoul.kr";
       Long id = 1L;
       UserReqDto request = UserReqDto.builder()
-                                     .nickname(nickname)
-                                     .email(email)
-                                     .password("password")
-                                     .build();
+          .nickname(nickname)
+          .email(email)
+          .password("password")
+          .build();
       User expect = User.builder()
-                        .id(1L)
-                        .nickname(nickname)
-                        .email(email)
-                        .password("password")
-                        .build();
+          .id(1L)
+          .nickname(nickname)
+          .email(email)
+          .password("password")
+          .build();
       BDDMockito.given(repository.findById(any(Long.class))).willReturn(Optional.of(expect));
       BDDMockito.given(queryService.isDuplicateNickname(any(Long.class), any(String.class)))
-                .willReturn(false);
+          .willReturn(false);
       BDDMockito.given(queryService.isDuplicateEmail(any(Long.class), any(String.class)))
-                .willReturn(true);
+          .willReturn(true);
       BDDMockito.given(repository.save(any(User.class))).willReturn(expect);
       // when then
-      assertThrows(BadRequestException.class, () -> service.update(1L, request));
+      assertThrows(CustomException.class, () -> service.update(1L, request), ExceptionStatus.DUPLICATED_EMAIL.getMsg());
     }
 
   }
@@ -202,11 +201,11 @@ class UserServiceTest {
     @BeforeEach
     public void setUp() {
       user = User.builder()
-                 .id(1L)
-                 .nickname("test")
-                 .email("test@test.com")
-                 .password("password")
-                 .build();
+          .id(1L)
+          .nickname("test")
+          .email("test@test.com")
+          .password("password")
+          .build();
     }
 
     @Test
@@ -215,10 +214,10 @@ class UserServiceTest {
       // given
       Long id = 1L;
       UserResDto expected = UserResDto.builder()
-                                      .id(user.getId())
-                                      .nickname(user.getNickname())
-                                      .email(user.getEmail())
-                                      .build();
+          .id(user.getId())
+          .nickname(user.getNickname())
+          .email(user.getEmail())
+          .build();
       BDDMockito.given(repository.findById(any(Long.class))).willReturn(Optional.of(user));
       BDDMockito.given(mapper.mapToResDto(any(User.class))).willReturn(expected);
       // when
@@ -233,14 +232,14 @@ class UserServiceTest {
       // given
       Long id = 1L;
       UserResDto expected = UserResDto.builder()
-                                      .id(user.getId())
-                                      .nickname(user.getNickname())
-                                      .email(user.getEmail())
-                                      .build();
+          .id(user.getId())
+          .nickname(user.getNickname())
+          .email(user.getEmail())
+          .build();
       BDDMockito.given(repository.findById(any(Long.class))).willReturn(Optional.empty());
       BDDMockito.given(mapper.mapToResDto(any(User.class))).willReturn(expected);
       // when
-      assertThrows(NotFoundException.class, () -> service.getById(999L));
+      assertThrows(CustomException.class, () -> service.getById(999L), ExceptionStatus.USER_NOT_FOUND.getMsg());
     }
   }
 
@@ -253,11 +252,11 @@ class UserServiceTest {
     @BeforeEach
     public void setUp() {
       user = User.builder()
-                 .id(1L)
-                 .nickname("test")
-                 .email("test@test.com")
-                 .password("password")
-                 .build();
+          .id(1L)
+          .nickname("test")
+          .email("test@test.com")
+          .password("password")
+          .build();
     }
 
     @Test
@@ -266,12 +265,12 @@ class UserServiceTest {
       // given
       Long id = 1L;
       UserResDto expected = UserResDto.builder()
-                                      .id(user.getId())
-                                      .nickname(user.getNickname())
-                                      .email(user.getEmail())
-                                      .build();
+          .id(user.getId())
+          .nickname(user.getNickname())
+          .email(user.getEmail())
+          .build();
       BDDMockito.given(repository.findByNickname(any(String.class)))
-                .willReturn(Optional.of(user));
+          .willReturn(Optional.of(user));
       BDDMockito.given(mapper.mapToResDto(any(User.class))).willReturn(expected);
       // when
       UserResDto result = assertDoesNotThrow(
@@ -286,14 +285,14 @@ class UserServiceTest {
       // given
       Long id = 1L;
       UserResDto expected = UserResDto.builder()
-                                      .id(user.getId())
-                                      .nickname(user.getNickname())
-                                      .email(user.getEmail())
-                                      .build();
+          .id(user.getId())
+          .nickname(user.getNickname())
+          .email(user.getEmail())
+          .build();
       BDDMockito.given(repository.findByNickname(any(String.class))).willReturn(Optional.empty());
       BDDMockito.given(mapper.mapToResDto(any(User.class))).willReturn(expected);
       // when
-      assertThrows(NotFoundException.class, () -> service.getByNickname("None"));
+      assertThrows(CustomException.class, () -> service.getByNickname("None"), ExceptionStatus.USER_NOT_FOUND.getMsg());
     }
   }
 
@@ -306,11 +305,11 @@ class UserServiceTest {
     @BeforeEach
     public void setUp() {
       user = User.builder()
-                 .id(1L)
-                 .nickname("test")
-                 .email("test@test.com")
-                 .password("password")
-                 .build();
+          .id(1L)
+          .nickname("test")
+          .email("test@test.com")
+          .password("password")
+          .build();
     }
 
     @Test
@@ -319,12 +318,12 @@ class UserServiceTest {
       // given
       Long id = 1L;
       UserResDto expected = UserResDto.builder()
-                                      .id(user.getId())
-                                      .nickname(user.getNickname())
-                                      .email(user.getEmail())
-                                      .build();
+          .id(user.getId())
+          .nickname(user.getNickname())
+          .email(user.getEmail())
+          .build();
       BDDMockito.given(repository.findByEmail(any(String.class)))
-                .willReturn(Optional.of(user));
+          .willReturn(Optional.of(user));
       BDDMockito.given(mapper.mapToResDto(any(User.class))).willReturn(expected);
       // when
       UserResDto result = assertDoesNotThrow(
@@ -339,14 +338,14 @@ class UserServiceTest {
       // given
       Long id = 1L;
       UserResDto expected = UserResDto.builder()
-                                      .id(user.getId())
-                                      .nickname(user.getNickname())
-                                      .email(user.getEmail())
-                                      .build();
+          .id(user.getId())
+          .nickname(user.getNickname())
+          .email(user.getEmail())
+          .build();
       BDDMockito.given(repository.findByEmail(any(String.class))).willReturn(Optional.empty());
       BDDMockito.given(mapper.mapToResDto(any(User.class))).willReturn(expected);
       // when
-      assertThrows(NotFoundException.class, () -> service.getByEmail("None"));
+      assertThrows(CustomException.class, () -> service.getByEmail("None"), ExceptionStatus.USER_NOT_FOUND.getMsg());
     }
   }
 }
