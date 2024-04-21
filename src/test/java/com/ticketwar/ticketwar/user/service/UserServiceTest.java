@@ -13,7 +13,6 @@ import com.ticketwar.ticketwar.user.repository.UserRepository;
 import com.ticketwar.ticketwar.user.utils.UserMapper;
 import jakarta.transaction.Transactional;
 import java.util.Optional;
-import org.apache.coyote.BadRequestException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -25,8 +24,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
-import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
-
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
