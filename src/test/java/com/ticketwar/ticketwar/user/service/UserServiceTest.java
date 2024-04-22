@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 
+import com.ticketwar.ticketwar.exception.CustomException;
 import com.ticketwar.ticketwar.user.dto.UserReqDto;
 import com.ticketwar.ticketwar.user.dto.UserResDto;
 import com.ticketwar.ticketwar.user.entity.User;
@@ -12,7 +13,6 @@ import com.ticketwar.ticketwar.user.repository.UserRepository;
 import com.ticketwar.ticketwar.user.utils.UserMapper;
 import jakarta.transaction.Transactional;
 import java.util.Optional;
-import org.apache.coyote.BadRequestException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -24,8 +24,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
-import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
-
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
@@ -82,7 +80,7 @@ class UserServiceTest {
                                      .build();
       BDDMockito.given(queryService.isDuplicateNickname(any(String.class))).willReturn(true);
       // when, then
-      assertThrows(BadRequestException.class, () -> service.signUp(request));
+      assertThrows(CustomException.class, () -> service.signUp(request));
     }
 
     @DisplayName("실패 - 이메일 중복")
@@ -96,7 +94,7 @@ class UserServiceTest {
       BDDMockito.given(queryService.isDuplicateNickname(any(String.class))).willReturn(false);
       BDDMockito.given(queryService.isDuplicateEmail(any(String.class))).willReturn(true);
       // when, then
-      assertThrows(BadRequestException.class, () -> service.signUp(request));
+      assertThrows(CustomException.class, () -> service.signUp(request));
     }
 
   }
@@ -160,7 +158,7 @@ class UserServiceTest {
                 .willReturn(false);
       BDDMockito.given(repository.save(any(User.class))).willReturn(expect);
       // when then
-      assertThrows(BadRequestException.class, () -> service.update(1L, request));
+      assertThrows(CustomException.class, () -> service.update(1L, request));
     }
 
     @Test
@@ -188,7 +186,7 @@ class UserServiceTest {
                 .willReturn(true);
       BDDMockito.given(repository.save(any(User.class))).willReturn(expect);
       // when then
-      assertThrows(BadRequestException.class, () -> service.update(1L, request));
+      assertThrows(CustomException.class, () -> service.update(1L, request));
     }
 
   }
@@ -240,7 +238,7 @@ class UserServiceTest {
       BDDMockito.given(repository.findById(any(Long.class))).willReturn(Optional.empty());
       BDDMockito.given(mapper.mapToResDto(any(User.class))).willReturn(expected);
       // when
-      assertThrows(NotFoundException.class, () -> service.getById(999L));
+      assertThrows(CustomException.class, () -> service.getById(999L));
     }
   }
 
@@ -293,7 +291,7 @@ class UserServiceTest {
       BDDMockito.given(repository.findByNickname(any(String.class))).willReturn(Optional.empty());
       BDDMockito.given(mapper.mapToResDto(any(User.class))).willReturn(expected);
       // when
-      assertThrows(NotFoundException.class, () -> service.getByNickname("None"));
+      assertThrows(CustomException.class, () -> service.getByNickname("None"));
     }
   }
 
@@ -346,7 +344,7 @@ class UserServiceTest {
       BDDMockito.given(repository.findByEmail(any(String.class))).willReturn(Optional.empty());
       BDDMockito.given(mapper.mapToResDto(any(User.class))).willReturn(expected);
       // when
-      assertThrows(NotFoundException.class, () -> service.getByEmail("None"));
+      assertThrows(CustomException.class, () -> service.getByEmail("None"));
     }
   }
 }
